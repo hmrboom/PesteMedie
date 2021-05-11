@@ -15,7 +15,7 @@ const Home = ({navigation}) => {
 const styles = StyleSheet.create({
     main: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: 'lightskyblue',
         alignItems: 'center',
         justifyContent: 'center',
         color: 'red',
