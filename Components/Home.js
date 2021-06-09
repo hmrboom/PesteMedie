@@ -1,5 +1,7 @@
 import React from 'react';
 import {Button, StyleSheet, Text, View} from "react-native";
+import axios from "axios";
+import {forEach} from "react-bootstrap/ElementChildren";
 
 const Home = ({navigation}) => {
     return (
@@ -8,6 +10,7 @@ const Home = ({navigation}) => {
         onPress={()=> navigation.navigate('Profile')}
         title="Home frate"
         />
+        <Button onPress={Request} title="ceva"/>
         </View>
     );
 };
@@ -21,4 +24,13 @@ const styles = StyleSheet.create({
         color: 'red',
     },
 });
+function Request()
+{
+    axios.get('https://jsonplaceholder.typicode.com/users')
+        .then((response) => {
+
+        }
+        );
+
+}
 export default Home;
