@@ -1,13 +1,14 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, TextInput, TouchableOpacity, View, Button, Image, Platform} from "react-native";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-
+import { RadioButton } from 'react-native-paper';
 const Register = ({navigation}) => {
     const yourPicture = require('../Images/pic_3_10.jpg');
     const [date, setDate] = useState(new Date(1598051730000));
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
     const [dateString, setdateString] = useState('');
+    const [checked,setChecked] = useState('M');
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
         setShow(Platform.OS === 'ios');
@@ -58,12 +59,10 @@ const Register = ({navigation}) => {
                 </View>
 
                   <View style={styles.datePick}>
-                      <View style={styles.sexInput}>
-                          <Text>asa</Text>
-                      </View>
 
-                    <Text>{dateString}</Text>
-                    <Button style={styles.dateButon} onPress={showDatepicker} title="data nastere" color=""/>
+
+                    <Button onPress={showDatepicker} title="data nastere" color=""/>
+                      <Text style={{left:20}}>--->{dateString}</Text>
                 </View>
                 {show && (
                     <RNDateTimePicker
@@ -72,9 +71,29 @@ const Register = ({navigation}) => {
                         mode={mode}
                         display="default"
                         minimumDate={new Date(1951, 0, 1)}
+                        maximumDate={new Date(2021,12,30)}
                         onChange={onChange}
                     />
                 )}
+
+
+                   <View style={styles.radioButon}>
+
+                    <RadioButton
+                       value="M"
+                       status={ checked === 'F' ? 'checked' : 'unchecked'}
+                       onPress={() => setChecked('F')}
+                       color="blue"
+                    />
+                     <Text>Male</Text>
+                    <RadioButton
+                        value="F"
+                        status={ checked === 'M' ? 'checked' : 'unchecked'}
+                        onPress={() => setChecked('M')}
+                        color="red"
+                    />
+                       <Text>Female</Text>
+                </View>
 
                 <TouchableOpacity onPress={() => navigation.push('Login')}>
                     <Text>Do u have already acc?Login!</Text>
@@ -127,11 +146,17 @@ const styles = StyleSheet.create({
         },
     datePick: {
          marginBottom: 20,
-         alignItems:"flex-end",
+         alignItems:"center",
+        flexDirection: 'row',
 
     },
     sexInput:{
          right:230
+    },
+    radioButon:{
+        flexDirection: "row",
+        alignItems:"center",
+
     }
 
 });

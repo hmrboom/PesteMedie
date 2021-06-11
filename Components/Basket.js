@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Image,Button, View, StyleSheet, Platform, Text, TouchableOpacity} from "react-native";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-
+import Unorderedlist from 'react-native-unordered-list';
 const Basket = ({}) => {
     const [date, setDate] = useState(new Date(1598051730000));
     const [mode, setMode] = useState('date');
@@ -27,36 +27,14 @@ const Basket = ({}) => {
 
     return (
         <View style={styles.container}>
-            <View>
-                <Button onPress={showDatepicker} title="Show date picker!" />
-            </View>
-            {show && (
-                <RNDateTimePicker
-                    testID="dateTimePicker"
-                    value={date}
-                    mode={mode}
-                    display="default"
-                    minimumDate={new Date(1951, 0, 1)}
-                    onChange={onChange}
-                />
-            )}
-            <Button onPress={()=> console.log(date.getDate() + " " + date.getMonth() + " " + date.getFullYear())} title="ia?"/>
-            <Text>h</Text>
-            <TouchableOpacity
-                style={styles.buttonGPlusStyle}
-                activeOpacity={0.5}>
-                <Image
-                    source={{
-                        uri:
-                            'https://raw.githubusercontent.com/AboutReact/sampleresource/master/google-plus.png',
-                    }}
-                    style={styles.buttonImageIconStyle}
-                />
-                <View style={styles.buttonIconSeparatorStyle} />
-                <Text style={styles.buttonTextStyle}>
-                    Login Using Google Plus
-                </Text>
-            </TouchableOpacity>
+
+<View style={styles.mere}>
+                <Unorderedlist>
+                    <Unorderedlist><Text>s1</Text></Unorderedlist>
+                    <Unorderedlist><Text>s2</Text></Unorderedlist>
+                    <Unorderedlist><Text>s3</Text></Unorderedlist>
+                </Unorderedlist>
+</View>
 
         </View>
     );
@@ -105,5 +83,9 @@ const styles = StyleSheet.create({
         width: 1,
         height: 40,
     },
+    mere:{
+        justifyContent:"center"
+
+    }
 });
 export default Basket;

@@ -1,16 +1,20 @@
 import React from 'react';
-import {Button, StyleSheet, Text, View} from "react-native";
+import {Button, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import axios from "axios";
-import {forEach} from "react-bootstrap/ElementChildren";
+import {StatusBar} from "expo-status-bar";
+const Home = () => {
 
-const Home = ({navigation}) => {
     return (
         <View style={styles.main}>
-        <Button
-        onPress={()=> navigation.navigate('Profile')}
-        title="Home frate"
-        />
-        <Button onPress={Request} title="ceva"/>
+            <View style={styles.topButoane}>
+
+                <TouchableOpacity><Text>UNU</Text></TouchableOpacity>
+                <TouchableOpacity><Text>UNU</Text></TouchableOpacity>
+                <TouchableOpacity>
+                    <Image style={styles.searchButon} source={require('../Images/maxresdefault.jpg')}/>
+
+                </TouchableOpacity>
+            </View>
         </View>
     );
 };
@@ -19,18 +23,28 @@ const styles = StyleSheet.create({
     main: {
         flex: 1,
         backgroundColor: 'lightskyblue',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'red',
+        paddingTop: 15
     },
+    topButoane: {
+        top:10,
+        flexDirection: "row",
+        justifyContent: 'space-between',
+    },
+    searchButon:{
+        maxWidth:"35%",
+        maxHeight:"5%",
+        left:"65%",
+        borderRadius: 70,
+    }
 });
-function Request()
-{
+
+function Request() {
     axios.get('https://jsonplaceholder.typicode.com/users')
         .then((response) => {
 
-        }
+            }
         );
 
 }
+
 export default Home;
