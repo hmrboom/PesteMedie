@@ -2,10 +2,43 @@ import React, {useState} from 'react';
 import {Button, Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import axios from "axios";
 
-const Profile = ({navigation}) => {
+
+const Login = ({navigation}) => {
+
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const yourPicture = require('../Images/pic_3_10.jpg');
+
+    function Request() {
+        axios.post('http://10.0.2.2:8080/oauth/token',
+            {
+                body : new URLSearchParams({
+                    'username' : 'Vilcuiustin3@gmail.com',
+                    'password' : '1234',
+                    'grant_type' : 'password'
+                })
+
+            },
+        {
+            headers:{
+                'Authorization': 'Basic b3ZpZGl1czo='
+            }
+        }
+            )
+
+            // Vilcuiustin3@gmail.com
+            //  new Buffer('ovidius:').toString('base64')
+
+            .then((response) => {
+                console.log(response);
+            }, (error) => {
+                console.log(error);
+            });
+
+    }
+
+
     return (
         <View style={styles.main}>
             <View style={styles.container}>
@@ -34,7 +67,7 @@ const Profile = ({navigation}) => {
                 >
                     <Text style={styles.register_button}>Don't have an account?Register!</Text>
                 </TouchableOpacity>
-                <Button style={styles.loginBtn} title="LOGIN" color="lightcoral"/>
+                <Button style={styles.loginBtn} title="LOGIN" color="lightcoral" onPress={Request}/>
 
             </View>
         </View>
@@ -98,14 +131,5 @@ const styles = StyleSheet.create({
         }
 });
 
-function Request() {
-    axios.get('https://jsonplaceholder.typicode.com/users')
-        .then((response) => {
-                console.log(response.data);
-            }
-        );
 
-}
-
-
-export default Profile;
+export default Login;

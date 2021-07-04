@@ -1,29 +1,34 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, TextInput, TouchableOpacity, View, Button, Image, Platform} from "react-native";
-import RNDateTimePicker from "@react-native-community/datetimepicker";
-import { RadioButton } from 'react-native-paper';
+import {StyleSheet, Text, TextInput, TouchableOpacity, View, Button, Image} from "react-native";
+import {RadioButton} from 'react-native-paper';
+import axios from "axios";
+
 const Register = ({navigation}) => {
     const yourPicture = require('../Images/pic_3_10.jpg');
-    const [date, setDate] = useState(new Date(1598051730000));
-    const [mode, setMode] = useState('date');
-    const [show, setShow] = useState(false);
-    const [dateString, setdateString] = useState('');
-    const [checked,setChecked] = useState('M');
-    const onChange = (event, selectedDate) => {
-        const currentDate = selectedDate || date;
-        setShow(Platform.OS === 'ios');
-        setdateString(String(currentDate.getDate()) +" "+ String(currentDate.getMonth()) +" "+ String(currentDate.getFullYear()));
-    };
+    const [checked, setChecked] = useState('M');
 
-    const showMode = (currentMode) => {
-        setShow(true);
-        setMode(currentMode);
-    };
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [prenume, setPrenume] = useState('');
+    const [nume, setNume] = useState('');
 
-    const showDatepicker = () => {
-        showMode('date');
-    };
+    function Request() {
+        axios.post('http://10.0.2.2:8080/register',
+            {
+                email: email,
+                password: password,
+                nume: nume,
+                prenume: prenume,
+                sex: checked
 
+            })
+            .then(response => {
+                console.log(response);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
 
     return (
         <View style={styles.main}>
@@ -34,6 +39,7 @@ const Register = ({navigation}) => {
                         style={styles.text}
                         placeholder="Email"
                         placeholderColor="red"
+                        onChangeText={(email) => setEmail(email)}
                     />
                 </View>
                 <View style={styles.input}>
@@ -41,6 +47,7 @@ const Register = ({navigation}) => {
                         style={styles.text}
                         placeholder="Nume"
                         placeholderColor="red"
+                        onChangeText={(nume) => setNume(nume)}
                     />
                 </View>
                 <View style={styles.input}>
@@ -48,6 +55,7 @@ const Register = ({navigation}) => {
                         style={styles.text}
                         placeholder="Prenume"
                         placeholderColor="red"
+                        onChangeText={(prenume) => setPrenume(prenume)}
                     />
                 </View>
                 <View style={styles.input}>
@@ -55,50 +63,50 @@ const Register = ({navigation}) => {
                         style={styles.text}
                         placeholder="Password"
                         placeholderColor="red"
+                        onChangeText={(password) => setPassword(password)}
                     />
                 </View>
 
-                  <View style={styles.datePick}>
 
-
-                    <Button onPress={showDatepicker} title="data nastere" color=""/>
-                      <Text style={{left:20}}>--->{dateString}</Text>
-                </View>
-                {show && (
-                    <RNDateTimePicker
-                        testID="dateTimePicker"
-                        value={date}
-                        mode={mode}
-                        display="default"
-                        minimumDate={new Date(1951, 0, 1)}
-                        maximumDate={new Date(2021,12,30)}
-                        onChange={onChange}
-                    />
-                )}
-
-
-                   <View style={styles.radioButon}>
-
+                <View style={styles.radioButon}>
                     <RadioButton
-                       value="M"
-                       status={ checked === 'F' ? 'checked' : 'unchecked'}
-                       onPress={() => setChecked('F')}
-                       color="blue"
+                        value="M"
+                        status={checked === 'M' ? 'checked' : 'unchecked'}
+                        onPress={() => setChecked('M')}
+                        color="blue"
                     />
-                     <Text>Male</Text>
+                    <Text style={{marginRight: 100}}>Male</Text>
+
                     <RadioButton
                         value="F"
-                        status={ checked === 'M' ? 'checked' : 'unchecked'}
-                        onPress={() => setChecked('M')}
+                        status={checked === 'F' ? 'checked' : 'unchecked'}
+                        onPress={() => setChecked('F')}
                         color="red"
                     />
-                       <Text>Female</Text>
+                    <Text>Female</Text>
                 </View>
 
                 <TouchableOpacity onPress={() => navigation.push('Login')}>
-                    <Text>Do u have already acc?Login!</Text>
+                    <Text style={{marginBottom: 10}}>Do u have already acc?Login!</Text>
                 </TouchableOpacity>
-                <Button style={styles.registerBtn} title="Register" color="lightcoral"/>
+                <Button style={styles.registerBtn} title="Register" color="lightcoral" onPress={()=>{
+                    axios.post('http://10.0.2.2:8080/register',
+                        {
+                            email: email,
+                            password: password,
+                            nume: nume,
+                            prenume: prenume,
+                            sex: checked
+
+                        })
+                        .then(response => {
+                            console.log(response);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                    navigation.navigate('Login');
+                }}/>
 
             </View>
         </View>
@@ -145,17 +153,18 @@ const styles = StyleSheet.create({
             color: "mintcream",
         },
     datePick: {
-         marginBottom: 20,
-         alignItems:"center",
+        marginBottom: 20,
+        alignItems: "center",
         flexDirection: 'row',
 
     },
-    sexInput:{
-         right:230
+    sexInput: {
+        right: 230
     },
-    radioButon:{
+    radioButon: {
         flexDirection: "row",
-        alignItems:"center",
+        alignItems: "center",
+
 
     }
 

@@ -1,40 +1,26 @@
 import React, {useState} from 'react';
 import {Image,Button, View, StyleSheet, Platform, Text, TouchableOpacity} from "react-native";
-import RNDateTimePicker from "@react-native-community/datetimepicker";
 import Unorderedlist from 'react-native-unordered-list';
+import axios from "axios";
+// this.state ={
+//     nameList:[]
+// }
+//
+//
+// function componentDidMount() {
+//     axios.get('http://localhost:8080/getproducatoripaginated?page=1&size=15')
+//         .then(res =>{
+//             const nameList = res.data;
+//             this.setState({nameList})
+//         })
+// }
+
 const Basket = ({}) => {
-    const [date, setDate] = useState(new Date(1598051730000));
-    const [mode, setMode] = useState('date');
-    const [show, setShow] = useState(false);
-
-    const onChange = (event, selectedDate) => {
-        const currentDate = selectedDate || date;
-        setShow(Platform.OS === 'ios');
-        setDate(currentDate);
-        console.log("date->"+date);
-        console.log("ce am ales->"+currentDate);
-    };
-
-    const showMode = (currentMode) => {
-        setShow(true);
-        setMode(currentMode);
-    };
-
-    const showDatepicker = () => {
-        showMode('date');
-    };
 
 
     return (
         <View style={styles.container}>
 
-<View style={styles.mere}>
-                <Unorderedlist>
-                    <Unorderedlist><Text>s1</Text></Unorderedlist>
-                    <Unorderedlist><Text>s2</Text></Unorderedlist>
-                    <Unorderedlist><Text>s3</Text></Unorderedlist>
-                </Unorderedlist>
-</View>
 
         </View>
     );
