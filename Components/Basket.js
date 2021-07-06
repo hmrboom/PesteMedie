@@ -1,26 +1,51 @@
-import React, {useState} from 'react';
-import {Image,Button, View, StyleSheet, Platform, Text, TouchableOpacity} from "react-native";
-import Unorderedlist from 'react-native-unordered-list';
+import React, {useEffect, useState} from 'react';
+import {Image,Button, View, StyleSheet, Text, TouchableOpacity} from "react-native";
 import axios from "axios";
-// this.state ={
-//     nameList:[]
-// }
-//
-//
-// function componentDidMount() {
-//     axios.get('http://localhost:8080/getproducatoripaginated?page=1&size=15')
-//         .then(res =>{
-//             const nameList = res.data;
-//             this.setState({nameList})
-//         })
-// }
+
 
 const Basket = ({}) => {
+
+const [produse,setProduse] = useState([]);
+    function componentDidMount() {
+        axios.get('http://10.0.2.2:8080/getproducatoripaginated?page=1&size=15')
+            .then(res =>{
+                setProduse(res.data);
+                produse.map(item =>
+                    {
+
+                            console.log(item.produse);
+
+
+                    }
+
+                )
+            })
+    }
+    useEffect(() => {
+        axios.get('http://10.0.2.2:8080/getproducatoripaginated?page=1&size=15')
+            .then(res =>{
+                res.data.map(item=>{
+                    item.produse.map(ceva=>
+
+                    {
+                        console.log(ceva.denumire)
+                    })
+
+                })
+
+
+
+
+
+            })
+    }, [])
+
 
 
     return (
         <View style={styles.container}>
 
+            <Button style={{ padding:50 }}  title="Dap"/>
 
         </View>
     );

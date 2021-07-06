@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
-import {Button, Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {Button, Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import qs from 'qs';
+import Profile from "./Profile";
 import axios from "axios";
-
 
 const Login = ({navigation}) => {
 
@@ -9,32 +10,52 @@ const Login = ({navigation}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const yourPicture = require('../Images/pic_3_10.jpg');
+    const [modalOpen, setModal] = useState(false);
+    const [modalOpenFail, setModalFail] = useState(false);
+
 
     function Request() {
-        axios.post('http://10.0.2.2:8080/oauth/token',
-            {
-                body : new URLSearchParams({
-                    'username' : 'Vilcuiustin3@gmail.com',
-                    'password' : '1234',
-                    'grant_type' : 'password'
-                })
 
-            },
-        {
-            headers:{
-                'Authorization': 'Basic b3ZpZGl1czo='
-            }
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Basic b3ZpZGl1czo=");
+        myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+
+        var reqdata = {
+            "username": email,
+            "password": password,
+            "grant_type": "password",
+            "scope": "web"
         }
+
+        let esc = encodeURIComponent;
+        let query = Object.keys(reqdata).map(k => esc(k) + "=" + esc(reqdata[k])).join("&");
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: query,
+            redirect: 'follow',
+
+        };
+
+        fetch("http://10.0.2.2:8080/oauth/token", requestOptions)
+            .then(result => {
+                console.log(result.json())
+                    if (result.status === 200) {
+                        setModal(true)
+
+                    }
+                    else {
+                        setModalFail(true)
+                    }
+                }
             )
+            .catch(error => {
+                console.log(error)
+                }
+            );
 
-            // Vilcuiustin3@gmail.com
-            //  new Buffer('ovidius:').toString('base64')
-
-            .then((response) => {
-                console.log(response);
-            }, (error) => {
-                console.log(error);
-            });
 
     }
 
@@ -69,7 +90,71 @@ const Login = ({navigation}) => {
                 </TouchableOpacity>
                 <Button style={styles.loginBtn} title="LOGIN" color="lightcoral" onPress={Request}/>
 
+
             </View>
+            {
+                modalOpen &&
+
+                <View style={styles.modal}>
+                    <Modal
+                        visible={modalOpen}
+                        animation="slide"
+                        transparent={true}
+                    >
+                        <View style={styles.modal}>
+                            <View style={styles.modalView}>
+                                <Text> Autentificat cu Succes! </Text>
+                                <Button
+                                    onPress={() => {
+                                        setModal(false)
+                                        navigation.navigate("Profile",
+
+                                        )
+                                    }
+                                    }
+                                    style={{borderRadius: 20,
+
+                                    }}
+                                    title="Ok"
+
+                                />
+
+                            </View>
+                        </View>
+                    </Modal>
+
+                </View>
+
+            }
+            {
+                modalOpenFail &&
+                <View style={styles.modal}>
+                    <Modal
+                        visible={modalOpenFail}
+                        animation="slide"
+                        transparent={true}
+                    >
+                        <View style={styles.modal}>
+                            <View style={styles.modalView}>
+                                <Text> Email sau Parola gresita! </Text>
+                                <Button
+                                    onPress={() => {
+                                        setModalFail(false)
+                                    }
+                                    }
+                                    style={{borderRadius: 20,
+
+                                    }}
+                                    title="Ok"
+
+                                />
+
+                            </View>
+                        </View>
+                    </Modal>
+
+                </View>
+            }
         </View>
     )
 };
@@ -80,7 +165,6 @@ const styles = StyleSheet.create({
         backgroundColor: 'lightskyblue',
         alignItems: 'center',
         justifyContent: 'center',
-        color: 'red',
     },
     image: {
         marginBottom: 40,
@@ -128,7 +212,24 @@ const styles = StyleSheet.create({
             alignItems: "center",
             justifyContent: "center",
             color: "mintcream",
-        }
+        },
+    modal: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        width:"50%",
+        height:"50%",
+        marginLeft:100,
+        marginTop: 150
+    },
+    modalView:{
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 20,
+        alignItems: "center",
+
+    }
+
 });
 
 

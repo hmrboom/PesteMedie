@@ -1,128 +1,110 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, Image, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import {
+    FlatList,
+    Image,
+    SafeAreaView,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View
+} from "react-native";
 import icons from "../Consumables/icons";
 import produse from "../Consumables/produse";
 
 const Restaurant = ({navigation, route}) => {
-    const [restaurant, setRestaurant] = useState(null);
+    const [restaurant, setRestaurant] = useState([]);
+
     useEffect(() => {
-            let {item} = route.params;
-            setRestaurant(item);
-        }
-    )
+        let {item} = route.params;
+        setRestaurant(item);
+    }, [])
 
-    function rendRestaurant() {
-        return (
-            <View style={styles.restaurantP}>
-                <Image
-                    source={restaurant?.poza}
-                    style={{
-                        width:"100%",
-                        height: 300,
-                        resizeMode:"cover",
-                        borderRadius: 35
-                    }}
-                    />
-                <View style={{
-                    flexDirection: "row",
-                    padding:10
+    function test()
+    {
+        const renderItem = ({item}) => {
 
 
-                }}>
-                    <Image
-                        source={icons.starFull}
-                        style={{
-                            width:20,
-                            height:20,
-                            resizeMode:"contain"
-                        }}
-                        />
-                    <Text style={{fontSize:15}}>{restaurant?.rating}</Text>
+            return (
+                <View>
+                    <View style={styles.produseBorder}>
+
+                        <View style={styles.produseStyle}>
+                            <Image
+                                source={{uri: "http://10.0.2.2:8080" + item.path}}
+                                style={{
+                                    width: "80%",
+                                    height: "100%",
+                                    resizeMode: "cover",
+                                    borderRadius: 15,
+
+                                }}
+                            />
+                        </View>
+
+                        <View style={{
+                            flexDirection: "column",
+                            right: "30%",
+
+                        }}>
+                            {/*NUME PRODUS*/}
+                            <Text>{item.denumire}</Text>
+                            <Text>Pret:{item.pret}</Text>
+
+                        </View>
+                        <View style={{
+                            justifyContent:"flex-end"
+
+                        }}>
+                            <TouchableOpacity
+                                style={{
+                                    marginTop: "50%",
+                                    left: 15,
+
+                                }}
+                            >
+                                <Image
+                                    source={icons.add}
+                                    style={{
+                                        width: 30,
+                                        height: 30,
+                                        resizeMode: "cover",
+
+
+
+                                    }}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
                 </View>
+            )
+        }
+        let {item} = route.params;
+        const prod = item["produse"]
 
-            </View>
-
-
-        );
-    }
-
-    function rendProdus() {
-
-      const renderItem = ({item}) => {
-
-
-          return (
-              <View>
-                  <View style={styles.produseBorder}>
-
-                      <View style={styles.produseStyle}>
-                          <Image
-                              source={produse.paste}
-                              style={{
-                                  width: "100%",
-                                  height: "100%",
-                                  resizeMode: "cover",
-                                  borderRadius: 15,
-
-                              }}
-                          />
-                      </View>
-
-                      <View style={{
-                          flexDirection: "column",
-                          left: "25%"
-                      }}>
-                          {/*NUME PRODUS*/}
-                          <Text style={{fontSize: 28}}>Titule</Text>
-                          <Text style={{fontSize: 15}}>descriere</Text>
-
-                      </View>
-                      <View style={{
-                          flexDirection: "column",
-                          left: "50%"
-                      }}>
-                          <TouchableOpacity
-                              style={{
-                                  top: "50%",
-                                  left: 20,
-                              }}
-                          >
-                              <Image
-                                  source={icons.add}
-                                  style={{
-                                      width: 30,
-                                      height: 30,
-                                      resizeMode: "contain"
-                                  }}
-                              />
-                          </TouchableOpacity>
-                      </View>
-                  </View>
-              </View>
-          );
-      }
-        return (
-
+        return(
             <View style={{padding: 5}}>
-                <FlatList
 
+                <FlatList
+                    ListHeaderComponent={rendHeader()}
+                    data={prod}
                     showsVerticalScrollIndicator={false}
                     keyExtractor={item => `${item.id}`}
                     renderItem={renderItem}
                     contentContainerStyle={{paddingVertical: 10, marginBottom: 10}}
 
                 />
-
             </View>
-        );
-
-
+        )
     }
+
 
     function rendHeader() {
         return (
 
-            <View style={{flexDirection: "row"}}>
+            <View style={{marginBottom:10}}>
                 <TouchableOpacity
                     style={styles.backIM}
                     onPress={() => navigation.goBack()}
@@ -138,23 +120,35 @@ const Restaurant = ({navigation, route}) => {
                         }}
                     />
                 </TouchableOpacity>
+                <Image
+                    source={{uri: "http://10.0.2.2:8080" + restaurant.poza}}
+                    style={{
+                        width: "100%",
+                        height: 300,
+                        resizeMode: "cover",
+                    }}
+                />
 
                 <View style={{
                     flex: 1,
                     alignItems: "center",
                     justifyContent: "center",
                 }}>
-                    <View style={{
-                        height: 50,
-                        alignItems: "center",
-                        justifyContent: "center",
-                        borderRadius: 33,
-                        backgroundColor: "lightgray",
-                        paddingHorizontal: 30,
-                        marginRight: 15
-                    }}>
-                        <Text style={{fontSize: 20, fontWeight: "bold"}}>{restaurant?.name}</Text>
-                    </View>
+
+
+                        <Text style={{fontSize: 25, fontWeight: "bold", paddingTop: "1%"}}>{restaurant.denumire}</Text>
+
+                    <View style={{ flexDirection: "row" }}>
+                        <Image
+                            source={icons.starFull}
+                            style={{
+                                width: 20,
+                                height: 20,
+                                resizeMode: "contain"
+                            }}
+                        />
+                        <Text style={{fontSize: 15,marginLeft:5}}>{restaurant.stars}</Text>
+                   </View>
                 </View>
             </View>
 
@@ -168,10 +162,8 @@ const Restaurant = ({navigation, route}) => {
     return (
         <View style={styles.container}>
 
-            <SafeAreaView>
-                {rendHeader()}
-                {rendRestaurant()}
-                {rendProdus()}
+            <SafeAreaView style={{ flex: 1 }}>
+                {test()}
             </SafeAreaView>
 
         </View>
@@ -182,7 +174,8 @@ const styles = StyleSheet.create({
         {
             flex: 1,
             backgroundColor: "lightskyblue",
-            paddingTop: 40
+            paddingTop: 40,
+
         },
     backIM: {
         width: 40,
@@ -194,17 +187,25 @@ const styles = StyleSheet.create({
         borderRadius: 15
     },
     produseBorder: {
-        width: "90%",
-        height: "50%",
+
+        width: "93%",
+        height: 70,
         borderWidth: 1,
         top: 15,
         left: 22,
         borderRadius: 20,
-        flexDirection: "row"
+        flexDirection: "row",
+        marginBottom:15
+
+
+
+
+
+
     },
     restaurantP:
         {
-             padding:10
+            padding: 10
         }
 
 

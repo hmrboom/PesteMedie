@@ -1,17 +1,26 @@
-import React, {useState} from 'react';
-import {FlatList, Image, ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import React, {useEffect, useState} from 'react';
+import {FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Searchbar} from 'react-native-paper';
 import axios from "axios";
 import icons from "../Consumables/icons";
-import Card from "../Consumables/Card";
-import restaurante from "../Consumables/restaurante";
 import Restaurant from "./Restaurant";
-import produse from "../Consumables/produse";
+
 
 
 const Home = ({navigation}) => {
     const [search, setSearch] = useState('');
     const onChangeSearch = query => setSearch(query);
+
+    const [producatori, setProducator] = useState([]);
+
+   function request() {
+       axios.get('http://10.0.2.2:8080/getproducatoripaginated?page=1&size=15')
+           .then(res => setProducator(res.data),
+           )
+   }
+    useEffect(() => {
+        request()
+    }, [])
 
     const categories = [
         {
@@ -35,32 +44,7 @@ const Home = ({navigation}) => {
             iconName: icons.vegan,
         }
     ];
-    const restaurants = [
-        {
-            id: 1,
-            name: "Rest1",
-            poza: restaurante.mc,
-            rating:2.5
-        },
-        {
-            id: 2,
-            name: "Rest2",
-            poza: restaurante.kfc,
-            rating:3
-        },
-        {
-            id: 3,
-            name: "Rest3",
-            poza: restaurante.socului,
-            rating:5
-        },
-        {
-            id: 4,
-            name: "Rest4",
-            poza: restaurante.subway,
-            rating:4
-        }
-    ];
+
 
 
     function mainCategory() {
@@ -114,17 +98,20 @@ const Home = ({navigation}) => {
 
     function restaurant() {
         const renderItem = ({item}) => {
+
             return (
                 <TouchableOpacity
                     style={styles.rest}
                     onPress={() => navigation.navigate('Restaurant',
                         {
                             item
-                        })}
+                        },
+
+                        )}
                 >
                     <View>
                         <Image
-                            source={item.poza}
+                            source={{uri: "http://10.0.2.2:8080"+ item.poza}}
                             resizeMode="cover"
                             style={{
                                 width: "100%",
@@ -135,8 +122,16 @@ const Home = ({navigation}) => {
 
                     </View>
                     <View style={{alignItems: "center"}}>
-                        <Text style={{fontSize: 25}}>{item.name}</Text>
-                        <Text>Categorie</Text>
+                        <Text style={{fontSize: 25}}>{item.denumire}</Text>
+                        <View style={{ flexDirection:"row" }}>{item.category.map(categ =>
+                            {
+                                return(
+                                    <View key={categ.id}>
+                                        <Text key={categ.id}>{categ.category} </Text>
+                                    </View>
+                                )
+                            }
+                        )}</View>
                         <View style={{flexDirection: "row"}}>
                             <Image
                                 source={icons.starFull}
@@ -146,7 +141,7 @@ const Home = ({navigation}) => {
                                     marginRight: 10,
                                 }}
                             />
-                            <Text>{item.rating}</Text>
+                            <Text>{item.stars}</Text>
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -156,7 +151,7 @@ const Home = ({navigation}) => {
             <View style={{padding: 30}}>
                 <FlatList
                     ListHeaderComponent={mainCategory()}
-                    data={restaurants}
+                    data={producatori}
                     showsVerticalScrollIndicator={false}
                     keyExtractor={item => `${item.id}`}
                     renderItem={renderItem}
@@ -219,22 +214,8 @@ const styles = StyleSheet.create({
         }
 });
 
-function Request() {
-    axios.get('https://jsonplaceholder.typicode.com/users')
-        .then((response) => {
-
-            }
-        );
-
-}
 
 
-function Search() {
-    return (
-        <View>
 
-        </View>
-    );
-}
 
 export default Home;

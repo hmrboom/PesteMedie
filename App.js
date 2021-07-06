@@ -10,6 +10,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {SafeAreaProvider} from "react-native-safe-area-context/src/SafeAreaContext";
 import Basket from "./Components/Basket";
 import Restaurant from "./Components/Restaurant";
+import Profile from "./Components/Profile";
 
 
 const Tab = createBottomTabNavigator();
@@ -34,6 +35,7 @@ const Profilul = () => {
       }}>
           <Inr.Screen name="Login" component={Login}/>
           <Inr.Screen name="Register" component={Register}/>
+          <Inr.Screen name="Profile" component={Profile}/>
       </Inr.Navigator>
   );
 };
