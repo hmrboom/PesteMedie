@@ -3,6 +3,7 @@ import {Button, Image, Modal, StyleSheet, Text, TextInput, TouchableOpacity, Vie
 import qs from 'qs';
 import Profile from "./Profile";
 import axios from "axios";
+import * as SecureStore from 'expo-secure-store';
 
 const Login = ({navigation}) => {
 
@@ -14,11 +15,29 @@ const Login = ({navigation}) => {
     const [modalOpenFail, setModalFail] = useState(false);
 
 
+    async function save(key, value) {
+        console.log(key. value);
+        await SecureStore.deleteItemAsync(key);
+        await SecureStore.setItemAsync(key, value);
+    }
+
+    async function getValueFor(key) {
+        let result = await SecureStore.getItemAsync(key);
+        if (result) {
+            return result;
+        } else {
+            return null;
+        }
+    }
+
+
+
     function Request() {
 
         var myHeaders = new Headers();
         myHeaders.append("Authorization", "Basic b3ZpZGl1czo=");
         myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+        myHeaders.append("Access-Control-Allow-Origin", "localhost");
 
 
         var reqdata = {
@@ -39,22 +58,22 @@ const Login = ({navigation}) => {
 
         };
 
-        fetch("http://10.0.2.2:8080/oauth/token", requestOptions)
-            .then(result => {
-                console.log(result.json())
-                    if (result.status === 200) {
-                        setModal(true)
 
-                    }
-                    else {
-                        setModalFail(true)
-                    }
+
+        fetch("http://10.0.2.2:8080/oauth/token", requestOptions)
+            .then(response => {
+                if (response.status === 200) {
+                    setModal(true)
+
                 }
-            )
-            .catch(error => {
-                console.log(error)
+                else {
+                    setModalFail(true)
                 }
-            );
+                console.log(response.text().then(res=>{
+                    save("token", JSON.parse(res)["access_token"])
+                }))
+            })
+            .catch(error => console.log('error', error))
 
 
     }

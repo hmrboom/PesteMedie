@@ -12,9 +12,26 @@ import {
 } from "react-native";
 import icons from "../Consumables/icons";
 import produse from "../Consumables/produse";
+import Basket from "./Basket";
+import axios from "axios";
+import * as SecureStore from "expo-secure-store";
 
 const Restaurant = ({navigation, route}) => {
     const [restaurant, setRestaurant] = useState([]);
+    const [token,setToken] = useState('');
+
+    async function getValueFor(key) {
+        let result = await SecureStore.getItemAsync(key);
+        if (result) {
+            return result;
+        } else {
+            return null;
+        }
+    }
+    getValueFor("token").then(e=> {
+
+        setToken(e)
+    })
 
     useEffect(() => {
         let {item} = route.params;
@@ -50,19 +67,41 @@ const Restaurant = ({navigation, route}) => {
                         }}>
                             {/*NUME PRODUS*/}
                             <Text>{item.denumire}</Text>
-                            <Text>Pret:{item.pret}</Text>
+                            <Text>Pret:{item.pret} lei</Text>
 
                         </View>
                         <View style={{
-                            justifyContent:"flex-end"
+                            marginLeft: "auto"
 
                         }}>
                             <TouchableOpacity
                                 style={{
-                                    marginTop: "50%",
-                                    left: 15,
+                                    marginTop: "auto",
+                                    marginBottom: 10,
+                                    marginRight: 10
+
 
                                 }}
+                                onPress={() => {
+
+                                        axios.post('http://10.0.2.2:8080/buy',
+                                            {
+
+                                                produse: item.id,
+                                                headers: {
+                                                    "Authorization": "Bearer " + token,
+                                                    "Content-Type": "application/json"
+                                                }
+                                            })
+                                            .then(e => {
+                                                console.log('a mers')
+                                            })
+                                            .catch(error => console.log(error))
+
+
+                                }
+
+                                }
                             >
                                 <Image
                                     source={icons.add}
@@ -70,7 +109,6 @@ const Restaurant = ({navigation, route}) => {
                                         width: 30,
                                         height: 30,
                                         resizeMode: "cover",
-
 
 
                                     }}
@@ -196,18 +234,10 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         flexDirection: "row",
         marginBottom:15
-
-
-
-
-
-
     },
     restaurantP:
         {
             padding: 10
         }
-
-
 });
 export default Restaurant;
