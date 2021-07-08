@@ -81,6 +81,34 @@ function Profile({navigation}) {
                         </TouchableOpacity>
 
                     </View>
+                    <View style={{
+                        borderRadius:5,
+                        elevation:1,
+                        marginHorizontal:50,
+                        marginVertical:10,
+                        right:30,
+                        backgroundColor:'rgba(0,1,1,0.29)'
+                    }}>
+                        <View style={{
+                            marginHorizontal:10,
+                            marginVertical:15,
+                            flexDirection:"column"
+
+                        }}>
+                            <Text style={{ fontSize:18,fontWeight:'bold' }}>Informatii generale</Text>
+                            <Text>Email: {data.email}</Text>
+                            <Text>Sex: {data.sex}</Text>
+                            {
+                                data.role.role === 'ROLE_ADMIN' &&
+                                    <Text>Role: Admin</Text>
+                            }
+                            {
+                                data.role.role !== 'ROLE_ADMIN' &&
+                                    <Text>Role: Membru</Text>
+                            }
+
+                        </View>
+                    </View>
 
                 </View>
             </View>
@@ -153,6 +181,9 @@ function Profile({navigation}) {
 
             <ScrollView style={{flex: 1, marginBottom: 15}}>
                 {rendHeader()}
+              <View style={{ alignItems:'center' }}>
+                  <Text style={{ fontSize:18,fontWeight:'bold'}}>Istoric Comenzi</Text>
+              </View>
 
                 {lastPurch()}
             </ScrollView>
