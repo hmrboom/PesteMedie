@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {createContext, useContext, useEffect, useState} from 'react';
 import {
+    Button,
     FlatList,
-    Image,
+    Image, Modal,
     SafeAreaView,
     ScrollView,
     StyleSheet,
@@ -12,13 +13,18 @@ import {
 } from "react-native";
 import icons from "../Consumables/icons";
 import produse from "../Consumables/produse";
-import Basket from "./Basket";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
+
+
+const products = []
+
+export const RestaurantContext = createContext(products)
 
 const Restaurant = ({navigation, route}) => {
     const [restaurant, setRestaurant] = useState([]);
     const [token,setToken] = useState('');
+
 
     async function getValueFor(key) {
         let result = await SecureStore.getItemAsync(key);
@@ -38,8 +44,10 @@ const Restaurant = ({navigation, route}) => {
         setRestaurant(item);
     }, [])
 
-    function test()
+
+    function rendProd()
     {
+        let ax = []
         const renderItem = ({item}) => {
 
 
@@ -84,23 +92,37 @@ const Restaurant = ({navigation, route}) => {
                                 }}
                                 onPress={() => {
 
-                                        axios.post('http://10.0.2.2:8080/buy',
-                                            {
+                                        // axios.post('https://10.0.2.2:8080/buy',
+                                        //     {
+                                        //         produse: [item.id]},{
+                                        //         headers: {
+                                        //             Authorization: "Bearer " + token,
+                                        //             "Content-Type": "application/json"
+                                        //         }
+                                        //     })
+                                        //     .then(e => {
+                                        //         console.log('a mers')
+                                        //     })
+                                        //     .catch(error => console.log(error))
+                                    let exista = false;
+                                    ax.map(e=>
+                                    {
+                                        if(e === item.id)
+                                        {
+                                            exista = true
+                                        }
+                                    })
+                                  if(exista === false)  {
 
-                                                produse: item.id,
-                                                headers: {
-                                                    "Authorization": "Bearer " + token,
-                                                    "Content-Type": "application/json"
-                                                }
-                                            })
-                                            .then(e => {
-                                                console.log('a mers')
-                                            })
-                                            .catch(error => console.log(error))
+                                      products.push(item)
+                                      ax.push(item.id)
+                                  }
+                                  if(exista === true)
+                                  {
+                                      console.log('e luat deja baga modal')
 
-
+                                  }
                                 }
-
                                 }
                             >
                                 <Image
@@ -198,13 +220,15 @@ const Restaurant = ({navigation, route}) => {
 
 
     return (
+        <RestaurantContext.Provider value={products}>
         <View style={styles.container}>
 
             <SafeAreaView style={{ flex: 1 }}>
-                {test()}
+                {rendProd()}
             </SafeAreaView>
 
         </View>
+        </RestaurantContext.Provider>
     );
 }
 const styles = StyleSheet.create({

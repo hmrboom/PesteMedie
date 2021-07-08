@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet} from 'react-native';
-import {NavigationContainer} from "@react-navigation/native";
+import {NavigationContainer, useIsFocused} from "@react-navigation/native";
 import Home from "./Components/Home";
 import Login from "./Components/Login";
 import Icon from 'react-native-vector-icons/FontAwesome5';
@@ -11,7 +11,7 @@ import {SafeAreaProvider} from "react-native-safe-area-context/src/SafeAreaConte
 import Basket from "./Components/Basket";
 import Restaurant from "./Components/Restaurant";
 import Profile from "./Components/Profile";
-
+import * as SecureStore from "expo-secure-store";
 
 const Tab = createBottomTabNavigator();
 const Inr = createStackNavigator();
@@ -40,7 +40,10 @@ const Profilul = () => {
   );
 };
 
+
 export default function App() {
+
+
     return (
         <NavigationContainer>
             <SafeAreaProvider style={styles.container}>

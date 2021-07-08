@@ -5,6 +5,9 @@ const vegan = require("../Images/vegetable.png");
 const starFull = require("../Images/star.png");
 const back = require("../Images/arrow.png");
 const add = require("../Images/add.png");
+const minus = require("../Images/minus.png");
+const plus = require("../Images/plus.png");
+const logout = require("../Images/logout.png");
 export default {
     pizza,
     donut,
@@ -12,5 +15,8 @@ export default {
     vegan,
     starFull,
     back,
-    add
+    add,
+    minus,
+    plus,
+    logout
 }

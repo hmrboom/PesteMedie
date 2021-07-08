@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {createContext, useEffect, useState} from 'react';
 import {FlatList, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Searchbar} from 'react-native-paper';
 import axios from "axios";
@@ -6,8 +6,7 @@ import icons from "../Consumables/icons";
 import Restaurant from "./Restaurant";
 
 
-
-const Home = ({navigation}) => {
+const Home = ({navigation , route}) => {
     const [search, setSearch] = useState('');
     const onChangeSearch = query => setSearch(query);
 
@@ -48,6 +47,7 @@ const Home = ({navigation}) => {
 
 
     function mainCategory() {
+
 
         const renderItem = ({item}) => {
 
@@ -166,6 +166,7 @@ const Home = ({navigation}) => {
 
 
     return (
+
         <View style={styles.main}>
             <Searchbar
                 style={styles.searchBar}
@@ -173,7 +174,7 @@ const Home = ({navigation}) => {
                 onChangeText={onChangeSearch}
                 value={search}
             />
-            <SafeAreaView style={{flex: 1}}>
+            <SafeAreaView style={{flex:1 }}>
                 {restaurant()}
             </SafeAreaView>
         </View>
